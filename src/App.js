@@ -1,117 +1,41 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import List from './List';
 
-// function App() {
-    
-//   return <div className="App">
-//         <header className="App-header">
-//           <img src={logo} className="App-logo" alt="logo" />
-//           <p>
-//             Edit <code>src/App.js</code> and save to reload.
-//           </p>
-//           <a
-//            className="App-link"
-//            href="https://reactjs.org"
-//            target="_blank"
-//            rel="noopener noreferrer"
-//           >
-//           Learn React
-//           </a>
-//        </header>
-//       </div>
-    
-// }
+class App extends Component {
 
-//Komponen-Props
-
-// function Umur(props) {
-//   return <span> berumur {props.age} </span>
-// }
-
-// function Greeting(props) {
-//   return <h1>Halo {props.name} <Umur age={props.age}/></h1>
-// }
-
-class Timer extends Component {
   constructor(props){
     super(props)
     this.state = {
-      time : props.start
+      todoItem : '',
+      items: []
     }
   }
 
-  componentDidMount(){
-    this.addInterval = setInterval( () => this.increase(), 1000)
+  handleSubmit = (event) => {
+    event.preventDefault()
+    this.setState({
+      items: [...this.state.items, this.state.todoItem],
+      todoItem: ''
+    })
   }
 
-  componentWillUnmount(){
-    clearInterval(this.addInterval)
+  handleChange = (event) => {
+    this.setState({
+      todoItem: event.target.value
+    })
   }
 
-  increase() {
-    //update state time
-    this.setState((state, props) => ({
-        time: parseInt(state.time) + 1
-    }))
-
-  }
-  
-  render() {
-    return(
-      <div>{this.state.time} Detik</div>
-    )
-  }
-}
-
-function Clicker(){
-  function handleClick(e){
-    alert('Berhasil')
-    e.preventDefault()
-  }
-
-  return(
-    <a href="#" onClick={handleClick}>Klik Di Sini !</a>
-  )
-}
-
-class Toggle extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      toggleStatus: true
-    }
-
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  handleClick(){
-    this.setState(state=> ({
-      toggleStatus: !state.toggleStatus
-    }))
-  }
-
-  render(){
-    return(
-      <button onClick={this.handleClick}>
-        {this.state.toggleStatus ? 'ON' : 'OFF'}
-        <p>Kondisi Lampu {this.state.toggleStatus ? 'Menyala' : 'Mati'}</p>
-      </button>
-    )
-  }
-}
-
-class App extends Component {
   render() {
     return(
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        {/* <Timer start="0"/>    
-        <Timer start="8"/> 
-        <Clicker />*/}
-        <Toggle />
-       </header>
+        <form onSubmit={this.handleSubmit}>
+          <input value={this.state.todoItem} onChange={this.handleChange}/>
+            <button>Add</button>
+        </form>
+
+        <List items={this.state.items}/>
       </div>
     );
   }
